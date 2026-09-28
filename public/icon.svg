@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#064e3b" />
+      <stop offset="50%" stop-color="#047857" />
+      <stop offset="100%" stop-color="#022c22" />
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="50%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="128" fill="url(#bg)" />
+  <circle cx="256" cy="256" r="180" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="4" />
+  
+  <!-- Daily Hisab Ledger / Sun / Wallet Shield -->
+  <g transform="translate(106, 106) scale(0.585)">
+    <!-- Base Wallet / Journal Card -->
+    <rect x="60" y="80" width="392" height="352" rx="48" fill="#065f46" stroke="#10b981" stroke-width="12" />
+    <!-- Flap with Gold accent -->
+    <path d="M60 160 C 160 240, 352 240, 452 160" fill="none" stroke="#34d399" stroke-width="12" stroke-linecap="round" />
+    
+    <!-- Taka Symbol ৳ in elegant calligraphy -->
+    <circle cx="256" cy="280" r="80" fill="#022c22" stroke="url(#gold)" stroke-width="10" />
+    <text x="256" y="325" font-family="system-ui, sans-serif" font-weight="900" font-size="120" fill="url(#gold)" text-anchor="middle">৳</text>
+    
+    <!-- Sun ray tick / Day cycle -->
+    <circle cx="256" cy="70" r="16" fill="#fbbf24" />
+    <path d="M 256 30 L 256 50 M 210 40 L 222 55 M 302 40 L 290 55" stroke="#fbbf24" stroke-width="8" stroke-linecap="round" />
+  </g>
+</svg>
