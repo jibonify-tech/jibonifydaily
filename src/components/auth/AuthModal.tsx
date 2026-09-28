@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, Mail, Phone, Lock, X, Check, Shield, LogOut } from 'lucide-react';
+import { User, Mail, Phone, Lock, X, Check, Shield, LogOut, Users } from 'lucide-react';
 import { Language, UserProfile } from '../../types';
 import { translations } from '../../i18n/translations';
 
@@ -8,6 +8,7 @@ interface AuthModalProps {
   onUpdateProfile: (profile: UserProfile) => void;
   onClose: () => void;
   language: Language;
+  onOpenMultiUserModal?: () => void;
 }
 
 export const AuthModal: React.FC<AuthModalProps> = ({
@@ -15,6 +16,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   onUpdateProfile,
   onClose,
   language,
+  onOpenMultiUserModal,
 }) => {
   const t = translations[language];
 
@@ -56,6 +58,29 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <X className="w-5 h-5" />
           </button>
         </div>
+
+        {onOpenMultiUserModal && (
+          <div className="mt-3 p-3 rounded-xl bg-indigo-950/40 border border-indigo-500/30 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <Users className="w-4 h-4 text-indigo-400 shrink-0" />
+              <div>
+                <p className="text-xs font-bold text-white">
+                  {language === 'bn' ? 'মাল্টি-ইউজার লগইন ও সুইচ' : 'Multi-User Login & Switch'}
+                </p>
+                <p className="text-[10px] text-slate-400">
+                  {language === 'bn' ? 'ভিন্ন ব্যবহারকারীর অ্যাকাউন্টে প্রবেশ করুন' : 'Log in as another user or switch account'}
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={onOpenMultiUserModal}
+              className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition whitespace-nowrap"
+            >
+              {language === 'bn' ? 'সুইচ' : 'Switch'}
+            </button>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="mt-4 space-y-3">
           <div>

@@ -277,16 +277,38 @@ export interface CashDenominationCounts {
   1: number;
 }
 
+export interface AppUserAccount {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  role: 'admin' | 'user' | 'accountant' | 'super_admin';
+  plan: 'free' | 'pro_monthly' | 'pro_yearly' | 'enterprise';
+  accountType: 'personal' | 'household' | 'business' | 'admin';
+  avatarUrl?: string;
+  pinLockEnabled: boolean;
+  pinCode?: string;
+  password?: string;
+  monthlyIncomeTarget?: number;
+  monthlyExpenseTarget?: number;
+  createdAt: string;
+  lastLogin: string;
+}
+
 export interface UserProfile {
+  id?: string;
   name: string;
   email: string;
   phone?: string;
   avatarUrl?: string;
-  role?: 'admin' | 'user' | 'accountant';
+  role?: 'admin' | 'user' | 'accountant' | 'super_admin';
+  plan?: 'free' | 'pro_monthly' | 'pro_yearly' | 'enterprise';
+  accountType?: 'personal' | 'household' | 'business' | 'admin';
   monthlyIncomeTarget?: number;
   monthlyExpenseTarget?: number;
   pinLockEnabled: boolean;
   pinCode?: string;
+  password?: string;
   isLoggedIn: boolean;
   lastLogin?: string;
 }

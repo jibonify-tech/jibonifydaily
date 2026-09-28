@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   Settings,
   User,
+  Users,
   Shield,
   Lock,
   Globe,
@@ -35,6 +36,7 @@ interface SettingsViewProps {
   onExportCSV: () => void;
   language: Language;
   onOpenAdminDashboard?: () => void;
+  onOpenMultiUserModal?: () => void;
 }
 
 type SettingsSection = 'profile' | 'localization' | 'daily' | 'security' | 'data';
@@ -51,6 +53,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   onExportCSV,
   language,
   onOpenAdminDashboard,
+  onOpenMultiUserModal,
 }) => {
   const t = translations[language];
 
@@ -66,7 +69,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   const [monthlyExpenseTarget, setMonthlyExpenseTarget] = useState(
     profile.monthlyExpenseTarget?.toString() || '45000'
   );
-  const [userRole, setUserRole] = useState<'admin' | 'user' | 'accountant'>(
+  const [userRole, setUserRole] = useState<'admin' | 'user' | 'accountant' | 'super_admin'>(
     profile.role || 'admin'
   );
 
@@ -216,6 +219,37 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       {/* 1. Profile & Targets */}
       {activeSection === 'profile' && (
         <form onSubmit={handleSaveAll} className="space-y-4">
+          {onOpenMultiUserModal && (
+            <div className="rounded-2xl border border-indigo-500/40 bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-2xl bg-indigo-600/30 border border-indigo-500/40 text-indigo-400 flex items-center justify-center font-bold shrink-0">
+                  <Users className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-white flex items-center gap-2">
+                    <span>{language === 'bn' ? 'মাল্টি-ইউজার অ্যাকাউন্ট ও সুইচিং' : 'Multi-User Accounts & Fast Switch'}</span>
+                    <span className="rounded bg-indigo-950 text-indigo-300 border border-indigo-500/30 px-1.5 py-0.5 text-[9px] font-bold uppercase">
+                      Active: {profile.name}
+                    </span>
+                  </h4>
+                  <p className="text-[11px] text-slate-400">
+                    {language === 'bn'
+                      ? 'একই ডিভাইসে ভিন্ন সদস্য বা পরিবারের জন্য স্বাধীন ক্যাশ লেজার পরিচালনা করুন।'
+                      : 'Manage independent ledgers for different members, businesses, or household accounts.'}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={onOpenMultiUserModal}
+                className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition flex items-center justify-center gap-1.5 shrink-0 shadow-md shadow-indigo-950/40"
+              >
+                <Users className="w-3.5 h-3.5" />
+                <span>{language === 'bn' ? 'অ্যাকাউন্ট পরিবর্তন করুন' : 'Switch Account'}</span>
+              </button>
+            </div>
+          )}
+
           <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-4 sm:p-5 shadow-xs space-y-4">
             <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
               <User className="w-4 h-4 text-emerald-400" />
@@ -265,10 +299,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 </label>
                 <select
                   value={userRole}
-                  onChange={(e) => setUserRole(e.target.value as 'admin' | 'user' | 'accountant')}
+                  onChange={(e) => setUserRole(e.target.value as 'admin' | 'user' | 'accountant' | 'super_admin')}
                   className="w-full rounded-xl bg-slate-800/90 border border-slate-700 px-3 py-2 text-xs sm:text-sm text-white focus:outline-hidden focus:border-emerald-500"
                 >
-                  <option value="admin">সুপার অ্যাডমিন (Super Admin)</option>
+                  <option value="super_admin">সুপার অ্যাডমিন (Super Admin)</option>
+                  <option value="admin">অ্যাডমিন (Admin)</option>
                   <option value="user">সাধারণ ব্যবহারকারী (Standard User)</option>
                   <option value="accountant">হিসাবরক্ষক (Accountant)</option>
                 </select>

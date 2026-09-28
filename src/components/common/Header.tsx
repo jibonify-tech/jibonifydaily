@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sun, Moon, Lock, Globe, User } from 'lucide-react';
+import { Sun, Moon, Lock, Globe, User, Users } from 'lucide-react';
 import { PWAInstallButton } from './PWAInstallButton';
 import { Language, ThemeMode, UserProfile } from '../../types';
 
@@ -13,6 +13,7 @@ interface HeaderProps {
   profile: UserProfile;
   onLockApp: () => void;
   onOpenProfile: () => void;
+  onOpenMultiUserModal?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -25,6 +26,7 @@ export const Header: React.FC<HeaderProps> = ({
   profile,
   onLockApp,
   onOpenProfile,
+  onOpenMultiUserModal,
 }) => {
   const toggleLanguage = () => {
     setLanguage(language === 'bn' ? 'en' : 'bn');
@@ -153,18 +155,27 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
-          {/* User Profile avatar/button */}
+          {/* User Profile & Multi-User Switcher avatar/button */}
           <button
-            onClick={onOpenProfile}
-            className="flex items-center gap-1.5 sm:gap-2 rounded-xl bg-slate-800 border border-slate-700 p-1 hover:border-emerald-500/50 transition shrink-0"
-            title={profile.name}
+            onClick={onOpenMultiUserModal || onOpenProfile}
+            className="flex items-center gap-1.5 sm:gap-2 rounded-xl bg-slate-800 border border-slate-700 p-1 hover:border-indigo-500/60 hover:bg-slate-750 transition shrink-0 group"
+            title={
+              language === 'bn'
+                ? `${profile.name} (ক্লিক করে অ্যাকাউন্ট পরিবর্তন করুন)`
+                : `${profile.name} (Click to switch user account)`
+            }
           >
-            <div className="h-7 w-7 rounded-lg bg-emerald-950 border border-emerald-500/40 text-emerald-400 flex items-center justify-center font-bold text-xs">
-              <User className="w-3.5 h-3.5" />
+            <div className="h-7 w-7 rounded-lg bg-indigo-950 border border-indigo-500/40 text-indigo-400 flex items-center justify-center font-bold text-xs shrink-0 group-hover:scale-105 transition">
+              <Users className="w-3.5 h-3.5" />
             </div>
-            <span className="hidden md:inline-block text-xs font-medium text-slate-200 pr-1.5 max-w-[90px] truncate">
-              {profile.name.split(' ')[0]}
-            </span>
+            <div className="hidden md:flex flex-col text-left pr-1.5 leading-none">
+              <span className="text-xs font-semibold text-slate-200 max-w-[95px] truncate">
+                {profile.name.split(' ')[0]}
+              </span>
+              <span className="text-[9px] text-indigo-400 font-bold uppercase mt-0.5">
+                {profile.role || 'user'}
+              </span>
+            </div>
           </button>
         </div>
       </div>

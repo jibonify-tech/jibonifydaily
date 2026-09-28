@@ -46,6 +46,8 @@ import { RemindersView } from './components/reminders/RemindersView';
 import { SettingsView } from './components/settings/SettingsView';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { AuthModal } from './components/auth/AuthModal';
+import { MultiUserModal } from './components/auth/MultiUserModal';
+import { multiUserService } from './services/multiUserService';
 
 export default function App() {
   // Global domain state
@@ -78,6 +80,7 @@ export default function App() {
   const [transactionModalType, setTransactionModalType] = useState<'expense' | 'income'>('expense');
   const [showTransferModal, setShowTransferModal] = useState<boolean>(false);
   const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
+  const [showMultiUserModal, setShowMultiUserModal] = useState<boolean>(false);
   const [receiptViewerData, setReceiptViewerData] = useState<{ url: string; title: string } | null>(null);
 
   // Initial seed check: if first time and no transactions, seed demo data
@@ -87,6 +90,14 @@ export default function App() {
       db.seedDemoData();
       refreshAllState();
     }
+  }, []);
+
+  // Listen to multi-user switching events
+  useEffect(() => {
+    const unsub = multiUserService.subscribe(() => {
+      refreshAllState();
+    });
+    return () => unsub();
   }, []);
 
   const refreshAllState = () => {
@@ -622,6 +633,7 @@ export default function App() {
             onExportCSV={handleExportCSV}
             language={settings.language}
             onOpenAdminDashboard={() => setCurrentTab('admin')}
+            onOpenMultiUserModal={() => setShowMultiUserModal(true)}
           />
         );
       case 'admin':
@@ -660,6 +672,7 @@ export default function App() {
         profile={profile}
         onLockApp={() => setIsAppLocked(true)}
         onOpenProfile={() => setShowProfileModal(true)}
+        onOpenMultiUserModal={() => setShowMultiUserModal(true)}
       />
 
       {/* Maintenance Mode Banner */}
@@ -692,6 +705,8 @@ export default function App() {
             setTransactionModalType('income');
             setShowTransactionModal(true);
           }}
+          profile={profile}
+          onOpenMultiUserModal={() => setShowMultiUserModal(true)}
         />
 
         {/* Viewport Content */}
@@ -717,6 +732,7 @@ export default function App() {
           setShowTransactionModal(true);
         }}
         onOpenTransfer={() => setShowTransferModal(true)}
+        onOpenMultiUserModal={() => setShowMultiUserModal(true)}
       />
 
       {/* Floating Offline Connectivity Indicator */}
@@ -815,8 +831,22 @@ export default function App() {
           onUpdateProfile={handleUpdateProfile}
           onClose={() => setShowProfileModal(false)}
           language={settings.language}
+          onOpenMultiUserModal={() => {
+            setShowProfileModal(false);
+            setShowMultiUserModal(true);
+          }}
         />
       )}
+
+      {/* Multi-User Fast Switch & Login Modal */}
+      <MultiUserModal
+        isOpen={showMultiUserModal}
+        onClose={() => setShowMultiUserModal(false)}
+        language={settings.language}
+        onAccountSwitched={() => {
+          refreshAllState();
+        }}
+      />
     </div>
   );
 }

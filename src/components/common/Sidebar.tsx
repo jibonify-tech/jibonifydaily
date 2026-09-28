@@ -16,7 +16,7 @@ import {
   ArrowUpRight,
   ArrowDownLeft,
 } from 'lucide-react';
-import { Language } from '../../types';
+import { Language, UserProfile } from '../../types';
 import { translations } from '../../i18n/translations';
 
 interface SidebarProps {
@@ -25,6 +25,8 @@ interface SidebarProps {
   language: Language;
   onOpenQuickExpense: () => void;
   onOpenQuickIncome: () => void;
+  profile?: UserProfile;
+  onOpenMultiUserModal?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -33,6 +35,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   language,
   onOpenQuickExpense,
   onOpenQuickIncome,
+  profile,
+  onOpenMultiUserModal,
 }) => {
   const t = translations[language];
 
@@ -100,14 +104,41 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </nav>
       </div>
 
-      {/* Footer info */}
-      <div className="border-t border-slate-800/80 pt-4 px-2">
-        <p className="text-[11px] text-slate-400 font-medium">
-          {language === 'bn' ? 'জীবনফাই ডেইলি v১.০' : 'Jibonify Daily v1.0'}
-        </p>
-        <p className="text-[10px] text-slate-400 mt-0.5">
-          {language === 'bn' ? 'আপনার ব্যক্তিগত আর্থিক সঙ্গী' : 'Personal Daily Finance System'}
-        </p>
+      {/* Footer & Multi-User Switcher Card */}
+      <div className="border-t border-slate-800/80 pt-3 px-1 space-y-2">
+        {profile && (
+          <button
+            type="button"
+            onClick={onOpenMultiUserModal}
+            className="w-full flex items-center justify-between p-2 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-indigo-500/50 hover:bg-slate-800/70 transition text-left group"
+            title={language === 'bn' ? 'অ্যাকাউন্ট পরিবর্তন করুন' : 'Switch User Account'}
+          >
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="h-7 w-7 rounded-lg bg-indigo-950/80 border border-indigo-500/30 text-indigo-400 flex items-center justify-center font-bold text-xs shrink-0 group-hover:scale-105 transition">
+                <Users className="w-3.5 h-3.5" />
+              </div>
+              <div className="min-w-0 leading-tight">
+                <p className="text-xs font-bold text-slate-200 truncate">{profile.name}</p>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <span className="text-[9px] text-indigo-400 font-bold uppercase">{profile.role || 'user'}</span>
+                  <span className="text-[9px] text-slate-400">• Switch</span>
+                </div>
+              </div>
+            </div>
+            <div className="text-[10px] text-indigo-400 font-bold px-1.5 py-0.5 rounded bg-indigo-950/60 border border-indigo-500/30 shrink-0">
+              {language === 'bn' ? 'সুইচ' : 'Switch'}
+            </div>
+          </button>
+        )}
+
+        <div className="px-1">
+          <p className="text-[11px] text-slate-400 font-medium">
+            {language === 'bn' ? 'জীবনফাই ডেইলি v১.০' : 'Jibonify Daily v1.0'}
+          </p>
+          <p className="text-[10px] text-slate-400 mt-0.5">
+            {language === 'bn' ? 'আপনার ব্যক্তিগত আর্থিক সঙ্গী' : 'Personal Daily Finance System'}
+          </p>
+        </div>
       </div>
     </aside>
   );

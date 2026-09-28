@@ -29,6 +29,7 @@ interface BottomNavProps {
   onOpenQuickExpense: () => void;
   onOpenQuickIncome: () => void;
   onOpenTransfer: () => void;
+  onOpenMultiUserModal?: () => void;
 }
 
 export const BottomNav: React.FC<BottomNavProps> = ({
@@ -38,6 +39,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
   onOpenQuickExpense,
   onOpenQuickIncome,
   onOpenTransfer,
+  onOpenMultiUserModal,
 }) => {
   const t = translations[language];
   const [showAddMenu, setShowAddMenu] = useState(false);
@@ -175,6 +177,31 @@ export const BottomNav: React.FC<BottomNavProps> = ({
                 );
               })}
             </div>
+
+            {onOpenMultiUserModal && (
+              <button
+                onClick={() => {
+                  setShowMoreMenu(false);
+                  onOpenMultiUserModal();
+                }}
+                className="w-full flex items-center justify-between p-3 rounded-xl bg-indigo-950/40 border border-indigo-500/30 text-indigo-300 hover:bg-indigo-900/40 transition active:scale-98"
+              >
+                <div className="flex items-center gap-2.5">
+                  <Users className="w-4 h-4 text-indigo-400" />
+                  <div className="text-left">
+                    <p className="text-xs font-bold text-white">
+                      {language === 'bn' ? 'মাল্টি-ইউজার লগইন ও সুইচ' : 'Multi-User Switch & Login'}
+                    </p>
+                    <p className="text-[10px] text-slate-400">
+                      {language === 'bn' ? 'অ্যাকাউন্ট পরিবর্তন বা নতুন লগইন' : 'Switch account or log in'}
+                    </p>
+                  </div>
+                </div>
+                <span className="px-2 py-1 rounded bg-indigo-600 text-white text-[10px] font-bold">
+                  {language === 'bn' ? 'সুইচ' : 'Switch'}
+                </span>
+              </button>
+            )}
           </div>
         </div>
       )}
